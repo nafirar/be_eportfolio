@@ -2,8 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-
-
+const cors = require("cors");
 
 //untuk path
 const userRoute = require("./routes/users");
@@ -12,11 +11,16 @@ const postRoute = require("./routes/posts");
 
 //koneksi database
 dotenv.config();
-mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser:true, 
-    useUnifiedTopology:true,
-    }, console.log("Connected to mongoDB")
+mongoose.connect(
+  process.env.MONGO_URL,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  console.log("Connected to mongoDB")
 );
+
+app.use(cors());
 
 //middleware
 app.use(express.json());
@@ -26,7 +30,6 @@ app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoute);
 
-
-app.listen(8800, ()=>{
-    console.log("Listening to port...");
-})
+app.listen(8800, () => {
+  console.log("Listening to port...");
+});
