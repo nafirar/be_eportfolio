@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const { json } = require("express");
 const Post = require("../models/Post");
-const User = require("../models/User");
 
 //create post
 router.post("/", async(req, res)=>{
@@ -12,7 +11,7 @@ router.post("/", async(req, res)=>{
     } catch (err) {
         res.status(500).json(err);
     }
-})
+});
 
 //update post
 router.put("/:id", async(req, res)=>{

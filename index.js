@@ -9,6 +9,7 @@ const dotenv = require("dotenv");
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
+const articleRoute = require("./routes/articles");
 
 //koneksi database
 dotenv.config();
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoute);
+app.use("/api/articles", articleRoute);
 
 
 app.listen(8800, ()=>{
