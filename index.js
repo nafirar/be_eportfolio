@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const multer = require("multer");
 
 //untuk path
 const userRoute = require("./routes/users");
@@ -34,10 +35,30 @@ app.use(
 app.use(express.json());
 
 //api
+app.use(express.static("storage"));
+app.use("/storage/images", express.static("storage/images"));
+// app.use("/user", express.static("images"));
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/articles", articleRoute);
+
+//Multer Error File Handling
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    // Multer-specific errors
+    return res.status(418).json({
+      err_code: err.code,
+      err_message: err.message,
+    });
+  } else {
+    // Handling errors for any other cases from whole application
+    return res.status(500).json({
+      err_code: 409,
+      err_message: "Something went wrong!",
+    });
+  }
+});
 
 app.listen(8800, () => {
   console.log("Listening to port...");

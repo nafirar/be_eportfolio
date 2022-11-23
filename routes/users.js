@@ -2,6 +2,9 @@ const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fileUpload = require("../utils/fileUpload");
+const fs = require("fs");
+const DIR = "./";
 
 //hapus akun
 router.delete("/:id", async (req, res) => {
@@ -18,7 +21,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //update akun
-router.put("/:id", async (req, res) => {
+router.put("/:id", fileUpload("./storage/images"), async (req, res) => {
   if (req.body.userId === req.params.id || req.body.isAdmin) {
     if (req.body.password) {
       try {
@@ -28,10 +31,34 @@ router.put("/:id", async (req, res) => {
         return res.status(500).json(err);
       }
     }
+
+    const id = req.params.id;
+
+    //If File have then push file into reqBody then process update
+    var imgUrl = "";
+    if (req.file) {
+      var imgUrl = `storage/images/${req.file.filename}`;
+    }
+    req.body.profilePicture = imgUrl;
+
     try {
+      //Check user have photo/image. if had then first delete local file then database
+      const userInfo = await User.findById(id);
+      const userPhotoInfo = userInfo.profilePicture;
+      // kalau udah ada foto tapi gak update foto
+      if (userPhotoInfo != "" && imgUrl == "") {
+        req.body.profilePicture = userPhotoInfo;
+      }
+      // kalau udah ada foto dan update foto
+      else if (userPhotoInfo != "" && imgUrl != "") {
+        fs.unlinkSync(DIR + userPhotoInfo);
+      }
+
       const user = await User.findByIdAndUpdate(req.params.id, {
-        $set: req.body,
+        username: req.body.username,
+        profilePicture: req.body.profilePicture,
       });
+
       res.status(200).json("Account updated!");
     } catch (err) {
       return res.status(500).json(err);
