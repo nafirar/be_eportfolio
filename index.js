@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 //untuk path
 const userRoute = require("./routes/users");
@@ -21,7 +22,13 @@ mongoose.connect(
   console.log("Connected to mongoDB")
 );
 
-app.use(cors());
+app.use(cookieParser());
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://127.0.0.1:5173", "http://127.0.0.1:3000"],
+  })
+);
 
 //middleware
 app.use(express.json());

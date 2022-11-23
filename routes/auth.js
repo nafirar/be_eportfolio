@@ -1,48 +1,101 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-//Registrasi
-router.post("/register", async(req,res)=>{
-    try{
-        //hash password using bcrypt
-        const salt = await bcrypt.genSalt(10); 
-        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+// Registrasi
+router.post("/register", async (req, res) => {
+  try {
+    //hash password using bcrypt
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-        //create new user
-        const newUser = await new User({
-            username:req.body.username,
-            email:req.body.email,
-            password:hashedPassword,
-        });
+    //create new user
+    const newUser = await new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: hashedPassword,
+    });
 
-        //save user and return respond
-        const user = await newUser.save();
-        res.status(200).json(user);
+    //save user and return respond
+    const user = await newUser.save();
 
-    }catch(err){
-        res.status(500).json(err);
-    }
+    const { password, ...data } = await user.toJSON();
+
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
-//login
-router.post("/login", async (req, res)=>{
-    try{
-        //untuk cek email ada atau gak
-        const user = await User.findOne({email:req.body.email});
-        !user && res.status(404).json("User not found");
-        
-        //untuk cek password bener atau gak
-        const validPassword = await bcrypt.compare(req.body.password, user.password);
-        !validPassword && res.status(400).json("Wrong password")
+// Login
+router.post("/login", async (req, res) => {
+  try {
+    //untuk cek email ada atau gak
+    const user = await User.findOne({ email: req.body.email });
 
-        //kalau login berhasil
-        res.status(200).json(user);
-
-    } catch(err){
-        res.status(500).json(err);
+    if (!user) {
+      return res.status(404).json("User not found");
     }
+
+    //untuk cek password bener atau gak
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    if (!validPassword) {
+      return res.status(400).json("Wrong password");
+    }
+
+    const token = jwt.sign({ id: user._id }, "secret");
+
+    res.cookie("jwt", token, {
+      sameSite: "none",
+      secure: true,
+      maxAge: 3600 * 24 * 1000, // 1 day
+    });
+
+    //kalau login berhasil
+    res.status(200).json({
+      message: "success",
+      jwt: token,
+      userId: user._id,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// getAuthenticatedUser
+router.get("/user", async (req, res) => {
+  try {
+    const cookie = req.cookies["jwt"];
+
+    const claims = jwt.verify(cookie, "secret");
+
+    if (!claims) {
+      return res.status(401).json("Unauthenticated");
+    }
+
+    const user = await User.findOne({ _id: claims.id });
+
+    const { password, ...data } = await user.toJSON();
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(401).json({
+      message: "unauthenticated",
+    });
+  }
+});
+
+// Logout
+router.post("/logout", async (req, res) => {
+  res.cookie("jwt", "", { sameSite: "none", secure: true, maxAge: 0 });
+
+  res.json({
+    message: "success",
+  });
 });
 
 module.exports = router;
-
