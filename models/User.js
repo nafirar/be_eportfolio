@@ -19,6 +19,29 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    nim: {
+      type: String,
+      default: "",
+    },
+    major: {
+      type: String,
+      default: "",
+    },
+    city: {
+      type: String,
+      default: "",
+    },
+    dateBirth: {
+      type: Date,
+    },
+    gender: {
+      type: String,
+      enum: ["male", "female"],
+    },
+    interest: {
+      type: String,
+      default: "",
+    },
     isAdmin: {
       type: Boolean,
       default: false,

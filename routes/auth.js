@@ -67,11 +67,11 @@ router.post("/login", async (req, res) => {
 });
 
 // getAuthenticatedUser
-router.get("/user", async (req, res) => {
+router.get("/user/:jwt", async (req, res) => {
   try {
-    const cookie = req.cookies["jwt"];
+    const jwtUser = req.params.jwt;
 
-    const claims = jwt.verify(cookie, "secret");
+    const claims = jwt.verify(jwtUser, "secret");
 
     if (!claims) {
       return res.status(401).json("Unauthenticated");
