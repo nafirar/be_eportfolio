@@ -32,15 +32,14 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const post = await Post.findById(req.params.id);
   try {
-    // if (post.userId === req.body.userId) {
-    // await post.deleteOne({ $set: req.body });
-    await Post.findByIdAndDelete(req.params.id);
+    if (post.userId === req.body.userId) {
+      // await post.deleteOne({ $set: req.body });
+      await Post.findByIdAndDelete(req.params.id);
 
-    res.status(200).json("Post deleted!");
-    // }
-    //  else {
-    //   res.status(500).json("You can only delete your post");
-    // }
+      res.status(200).json("Post deleted!");
+    } else {
+      res.status(500).json("You can only delete your post");
+    }
   } catch (err) {
     res.status(500).json(err);
   }
@@ -70,6 +69,18 @@ router.get("/timeline/all", async (req, res) => {
 router.get("/all/:id", async (req, res) => {
   try {
     const userPost = await Post.find({ userId: req.params.id }).sort({
+      createdAt: "desc",
+    });
+    res.json(userPost);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// get last post by id user
+router.get("/last/:id", async (req, res) => {
+  try {
+    const userPost = await Post.findOne({ userId: req.params.id }).sort({
       createdAt: "desc",
     });
     res.json(userPost);

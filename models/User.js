@@ -42,6 +42,33 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    about: {
+      type: String,
+      default: "",
+    },
+    socialMedia: {
+      instagram: {
+        type: String,
+        default: "",
+      },
+      linkedin: {
+        type: String,
+        default: "",
+      },
+      twitter: {
+        type: String,
+        default: "",
+      },
+      github: {
+        type: String,
+        default: "",
+      },
+    },
+    skill: [
+      {
+        type: String,
+      },
+    ],
     isAdmin: {
       type: Boolean,
       default: false,
