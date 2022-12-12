@@ -17,19 +17,15 @@ const UserSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default: "",
     },
     nim: {
       type: String,
-      default: "",
     },
     major: {
       type: String,
-      default: "",
     },
     city: {
       type: String,
-      default: "",
     },
     dateBirth: {
       type: Date,
@@ -40,28 +36,25 @@ const UserSchema = new mongoose.Schema(
     },
     interest: {
       type: String,
-      default: "",
     },
     about: {
       type: String,
-      default: "",
     },
     socialMedia: {
-      instagram: {
-        type: String,
-        default: "",
-      },
       linkedin: {
         type: String,
-        default: "",
-      },
-      twitter: {
-        type: String,
-        default: "",
       },
       github: {
         type: String,
-        default: "",
+      },
+      instagram: {
+        type: String,
+      },
+      facebook: {
+        type: String,
+      },
+      twitter: {
+        type: String,
       },
     },
     skill: [
@@ -69,10 +62,15 @@ const UserSchema = new mongoose.Schema(
         type: String,
       },
     ],
-    isAdmin: {
-      type: Boolean,
-      default: false,
+    role: {
+      type: String,
+      enum: ["dosen", "mahasiswa"],
     },
+    blockProfile: [
+      {
+        type: Object,
+      },
+    ],
   },
   { timestamps: true }
 );

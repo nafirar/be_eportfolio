@@ -28,6 +28,22 @@ const ArticleSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    comments: [
+      {
+        userId: {
+          type: mongoose.Schema.ObjectId,
+          required: true,
+        },
+        date: {
+          type: Date,
+          default: Date.now,
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
