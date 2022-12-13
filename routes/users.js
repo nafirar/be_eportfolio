@@ -46,11 +46,11 @@ router.put("/:id", fileUpload("./storage/images"), async (req, res) => {
       const userInfo = await User.findById(id);
       const userPhotoInfo = userInfo.profilePicture;
       // kalau udah ada foto tapi gak update foto
-      if (userPhotoInfo != "" && imgUrl == "") {
+      if (userPhotoInfo && imgUrl == "") {
         req.body.profilePicture = userPhotoInfo;
       }
       // kalau udah ada foto dan update foto
-      else if (userPhotoInfo != "" && imgUrl != "") {
+      else if (userPhotoInfo && imgUrl != "") {
         fs.unlinkSync(DIR + userPhotoInfo);
       }
 
