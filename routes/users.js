@@ -78,4 +78,22 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// search users by query
+router.get("/search/:id/:name", async (req, res) => {
+  try {
+    var users = await User.find({
+      username: { $regex: req.params.name, $options: "i" },
+      dateBirth: { $ne: null },
+    }).sort({ username: "asc" });
+    let temp = [];
+    users.forEach((user) => {
+      temp.push(user._id);
+    });
+    users = temp;
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

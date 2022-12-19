@@ -88,4 +88,19 @@ router.get("/last/:id", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// search posts by query
+router.get("/search/:search/", async (req, res) => {
+  try {
+    var posts = await Post.find({
+      desc: { $regex: req.params.search, $options: "i" },
+    }).sort({
+      createdAt: "desc",
+    });
+
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 module.exports = router;

@@ -66,6 +66,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
       enum: ["dosen", "mahasiswa"],
     },
+    academicField: {
+      type: String,
+    },
     blockProfile: [
       {
         type: Object,

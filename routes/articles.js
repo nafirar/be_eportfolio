@@ -38,11 +38,11 @@ router.put("/:id", coverArticle("./storage/images"), async (req, res) => {
     //Check user have photo/image. if had then first delete local file then database
     const articlePhotoInfo = article.coverArticle;
     // kalau udah ada foto tapi gak update foto
-    if (articlePhotoInfo != "" && imgUrl == "") {
+    if (articlePhotoInfo && imgUrl == "") {
       req.body.coverArticle = articlePhotoInfo;
     }
     // kalau udah ada foto dan update foto
-    else if (articlePhotoInfo != "" && imgUrl != "") {
+    else if (articlePhotoInfo && imgUrl != "") {
       fs.unlinkSync(DIR + articlePhotoInfo);
     }
 
@@ -102,6 +102,23 @@ router.get("/timeline/all", async (req, res) => {
   try {
     const userArticle = await Article.find().sort({ createdAt: "desc" });
     res.json(userArticle);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// search articles by query
+router.get("/search/:search", async (req, res) => {
+  try {
+    var articles = await Article.find({
+      $or: [
+        { desc: { $regex: req.params.search, $options: "i" } },
+        { title: { $regex: req.params.search, $options: "i" } },
+      ],
+    }).sort({
+      createdAt: "desc",
+    });
+    res.status(200).json(articles);
   } catch (err) {
     res.status(500).json(err);
   }
