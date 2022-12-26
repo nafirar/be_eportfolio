@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const router = require("express").Router();
 
 const ArticleSchema = new mongoose.Schema(
   {
@@ -28,6 +27,11 @@ const ArticleSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    tags: [
+      {
+        type: String,
+      },
+    ],
     comments: [
       {
         userId: {

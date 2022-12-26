@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const PostSchema = new mongoose.Schema(
+const AchievementSchema = new mongoose.Schema(
   {
     userId: {
       type: String,
@@ -11,7 +11,7 @@ const PostSchema = new mongoose.Schema(
       required: true,
       max: 500,
     },
-    img: {
+    imgAchievement: {
       type: String,
     },
     isPublic: {
@@ -42,4 +42,4 @@ const PostSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Post", PostSchema);
+module.exports = mongoose.model("Achievement", AchievementSchema);

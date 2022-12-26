@@ -11,6 +11,8 @@ const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
 const articleRoute = require("./routes/articles");
+const achievementRoute = require("./routes/achievements");
+const activityRoute = require("./routes/activities");
 
 //koneksi database
 dotenv.config();
@@ -37,11 +39,12 @@ app.use(express.json());
 //api
 app.use(express.static("storage"));
 app.use("/storage/images", express.static("storage/images"));
-// app.use("/user", express.static("images"));
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/articles", articleRoute);
+app.use("/api/achievements", achievementRoute);
+app.use("/api/activities", activityRoute);
 
 //Multer Error File Handling
 app.use((err, req, res, next) => {

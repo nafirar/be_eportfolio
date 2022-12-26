@@ -9,7 +9,7 @@ router.post("/", coverArticle("./storage/images"), async (req, res) => {
   //If File have then push file into reqBody then process update
   var imgUrl = "";
   if (req.file) {
-    var imgUrl = `storage/images/${req.file.filename}`;
+    imgUrl = `storage/images/${req.file.filename}`;
     req.body = JSON.parse(req.body.data);
   }
   req.body.coverArticle = imgUrl;
@@ -28,7 +28,7 @@ router.put("/:id", coverArticle("./storage/images"), async (req, res) => {
   //If File have then push file into reqBody then process update
   var imgUrl = "";
   if (req.file) {
-    var imgUrl = `storage/images/${req.file.filename}`;
+    imgUrl = `storage/images/${req.file.filename}`;
     req.body = JSON.parse(req.body.data);
   }
   req.body.coverArticle = imgUrl;
@@ -62,7 +62,6 @@ router.delete("/:id", async (req, res) => {
   const article = await Article.findById(req.params.id);
   try {
     if (article.userId === req.body.userId) {
-      // await post.deleteOne({ $set: req.body });
       await Article.findByIdAndDelete(req.params.id);
       fs.unlinkSync(DIR + article.coverArticle);
 
@@ -114,6 +113,7 @@ router.get("/search/:search", async (req, res) => {
       $or: [
         { desc: { $regex: req.params.search, $options: "i" } },
         { title: { $regex: req.params.search, $options: "i" } },
+        { tags: { $regex: req.params.search, $options: "i" } },
       ],
     }).sort({
       createdAt: "desc",

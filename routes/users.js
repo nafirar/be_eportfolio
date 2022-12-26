@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const fileUpload = require("../utils/fileUpload");
 const fs = require("fs");
 const DIR = "./";
@@ -37,7 +36,7 @@ router.put("/:id", fileUpload("./storage/images"), async (req, res) => {
     //If File have then push file into reqBody then process update
     var imgUrl = "";
     if (req.file) {
-      var imgUrl = `storage/images/${req.file.filename}`;
+      imgUrl = `storage/images/${req.file.filename}`;
     }
     req.body.profilePicture = imgUrl;
 
