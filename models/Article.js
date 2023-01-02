@@ -18,6 +18,7 @@ const ArticleSchema = new mongoose.Schema(
     },
     coverArticle: {
       type: String,
+      required: true,
     },
     isPublic: {
       type: Boolean,

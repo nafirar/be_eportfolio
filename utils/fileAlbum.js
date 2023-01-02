@@ -12,7 +12,7 @@ const storage = (destination) =>
     },
   });
 
-const imgAchievement = (destination) =>
+const fileAlbum = (destination) =>
   multer({
     storage: storage(destination),
     limits: {
@@ -22,18 +22,24 @@ const imgAchievement = (destination) =>
       if (
         file.mimetype == "image/png" ||
         file.mimetype == "image/jpg" ||
-        file.mimetype == "image/jpeg"
+        file.mimetype == "image/jpeg" ||
+        file.mimetype == "video/quicktime" ||
+        file.mimetype == "video/webm" ||
+        file.mimetype == "video/webm" ||
+        file.mimetype == "audio/ogg" ||
+        file.mimetype == "video/mp4" ||
+        file.mimetype == "application/pdf"
       ) {
         cb(null, true);
       } else {
         cb(null, false);
-        return cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
+        return cb(new Error("Format is not allowed!"));
       }
     },
     onError: function (err, next) {
       return console.log("error", err);
       next(err);
     },
-  }).single("imgAchievement");
+  }).single("fileAlbum");
 
-module.exports = imgAchievement;
+module.exports = fileAlbum;

@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Activity = require("../models/Activity");
+const Album = require("../models/Album");
 
 //create activity
 router.post("/", async (req, res) => {
@@ -81,7 +82,7 @@ router.get("/last/:id", async (req, res) => {
   try {
     const userActivity = await Activity.findOne({ userId: req.params.id }).sort(
       {
-        createdAt: "desc",
+        endDate: "desc",
       }
     );
     res.json(userActivity);
@@ -94,7 +95,10 @@ router.get("/last/:id", async (req, res) => {
 router.get("/search/:search/", async (req, res) => {
   try {
     var activitys = await Activity.find({
-      desc: { $regex: req.params.search, $options: "i" },
+      $or: [
+        { desc: { $regex: req.params.search, $options: "i" } },
+        { title: { $regex: req.params.search, $options: "i" } },
+      ],
     }).sort({
       createdAt: "desc",
     });
@@ -104,4 +108,19 @@ router.get("/search/:search/", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+//find activity
+router.get("/files/:id", async (req, res) => {
+  try {
+    const fileAlbum = await Album.find({
+      idActivity: req.params.id,
+    }).sort({
+      createdAt: "desc",
+    });
+    res.json(fileAlbum);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;
