@@ -16,6 +16,9 @@ const ArticleSchema = new mongoose.Schema(
       required: true,
       max: 3000,
     },
+    mermaidDiagram: {
+      type: String,
+    },
     coverArticle: {
       type: String,
       required: true,

@@ -31,10 +31,11 @@ const BadgeSchema = new mongoose.Schema(
       required: true,
       max: 500,
     },
-    // isPublic: {
-    //   type: Boolean,
-    //   default: true,
-    // },
+    skills: [
+      {
+        type: String,
+      },
+    ],
     createdAt: {
       type: Date,
       default: Date.now,

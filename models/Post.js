@@ -11,6 +11,9 @@ const PostSchema = new mongoose.Schema(
       required: true,
       max: 500,
     },
+    mermaidDiagram: {
+      type: String,
+    },
     img: {
       type: String,
     },

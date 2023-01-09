@@ -95,4 +95,21 @@ router.get("/search/:id/:name", async (req, res) => {
   }
 });
 
+//get all users
+router.get("/all/:id", async (req, res) => {
+  try {
+    var allUsers = await User.find({ dateBirth: { $ne: null } }).sort({
+      username: "asc",
+    });
+    let temp = [];
+    allUsers.forEach((user) => {
+      temp.push(user._id);
+    });
+    allUsers = temp;
+    res.json(allUsers);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

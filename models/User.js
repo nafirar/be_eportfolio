@@ -23,6 +23,10 @@ const UserSchema = new mongoose.Schema(
     major: {
       type: String,
     },
+    organization: {
+      type: String,
+      required: true,
+    },
     city: {
       type: String,
     },

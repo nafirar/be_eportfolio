@@ -6,9 +6,6 @@ const AlbumSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    idActivity: {
-      type: String,
-    },
     filename: {
       type: String,
       required: true,
