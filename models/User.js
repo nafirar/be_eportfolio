@@ -77,6 +77,16 @@ const UserSchema = new mongoose.Schema(
         type: Object,
       },
     ],
+    following: [
+      {
+        type: String,
+      },
+    ],
+    followers: [
+      {
+        type: String,
+      },
+    ],
   },
   { timestamps: true }
 );

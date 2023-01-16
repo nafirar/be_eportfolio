@@ -13,7 +13,7 @@ const postRoute = require("./routes/posts");
 const articleRoute = require("./routes/articles");
 const activityRoute = require("./routes/activities");
 const badgeRoute = require("./routes/badges");
-const albumRoute = require("./routes/albums");
+const albumRoute = require("./routes/album");
 
 //koneksi database
 dotenv.config();
@@ -48,7 +48,7 @@ app.use("/api/posts", postRoute);
 app.use("/api/articles", articleRoute);
 app.use("/api/activities", activityRoute);
 app.use("/api/badges", badgeRoute);
-app.use("/api/albums", albumRoute);
+app.use("/api/album", albumRoute);
 
 //Multer Error File Handling
 app.use((err, req, res, next) => {

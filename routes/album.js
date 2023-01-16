@@ -57,7 +57,6 @@ router.post("/document", fileAlbum("./storage/documents"), async (req, res) => {
     const savedAlbum = await newAlbum.save();
     res.status(200).json(savedAlbum);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -163,16 +162,16 @@ router.get("/last/:id", async (req, res) => {
   }
 });
 
-// search file albums by query
+// search file album by query
 router.get("/search/:search/", async (req, res) => {
   try {
-    var albums = await Album.find({
+    var album = await Album.find({
       desc: { $regex: req.params.search, $options: "i" },
     }).sort({
       createdAt: "desc",
     });
 
-    res.status(200).json(albums);
+    res.status(200).json(album);
   } catch (err) {
     res.status(500).json(err);
   }

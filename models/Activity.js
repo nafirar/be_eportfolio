@@ -30,9 +30,6 @@ const ActivitySchema = new mongoose.Schema(
       required: true,
       max: 500,
     },
-    mermaidDiagram: {
-      type: String,
-    },
     isPublic: {
       type: Boolean,
       default: true,
@@ -47,21 +44,18 @@ const ActivitySchema = new mongoose.Schema(
           type: String,
           required: true,
         },
-        image: {
-          type: String,
-          required: true,
-        },
         date: {
           type: Date,
         },
         desc: {
           type: String,
-          required: true,
           max: 500,
         },
-        mermaidDiagram: {
-          type: String,
-        },
+        images: [
+          {
+            type: String,
+          },
+        ],
       },
     ],
   },

@@ -98,7 +98,7 @@ router.get("/search/:id/:name", async (req, res) => {
 //get all users
 router.get("/all/:id", async (req, res) => {
   try {
-    var allUsers = await User.find({ dateBirth: { $ne: null } }).sort({
+    var allUsers = await User.find({ gender: { $ne: null } }).sort({
       username: "asc",
     });
     let temp = [];
@@ -107,6 +107,60 @@ router.get("/all/:id", async (req, res) => {
     });
     allUsers = temp;
     res.json(allUsers);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// follow user
+router.put("/follow/:id", async (req, res) => {
+  try {
+    // tambah following di user yang ngefollow
+    const userFollowing = await User.findById(req.body.userIdFollowing);
+    userFollowingFollowing = userFollowing.following;
+    userFollowingFollowing.push(req.params.id);
+    await userFollowing.updateOne({
+      $set: { following: userFollowingFollowing },
+    });
+
+    // tambah followers di user yang difollow
+    const userFollowed = await User.findById(req.params.id);
+    userFollowedFollowers = userFollowed.followers;
+    userFollowedFollowers.push(req.body.userIdFollowing);
+    await userFollowed.updateOne({
+      $set: { followers: userFollowedFollowers },
+    });
+
+    res.status(200).json({ userFollowing, userFollowed });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// follow user
+router.put("/unfollow/:id", async (req, res) => {
+  try {
+    // hapus following di user yang ngefollow
+    const userFollowing = await User.findById(req.body.userIdFollowing);
+    userFollowingFollowing = userFollowing.following;
+    userFollowingFollowing = userFollowingFollowing.filter(
+      (e) => e !== req.params.id
+    );
+    await userFollowing.updateOne({
+      $set: { following: userFollowingFollowing },
+    });
+
+    // hapus followers di user yang difollow
+    const userFollowed = await User.findById(req.params.id);
+    userFollowedFollowers = userFollowed.followers;
+    userFollowedFollowers = userFollowedFollowers.filter(
+      (e) => e !== req.body.userIdFollowing
+    );
+    await userFollowed.updateOne({
+      $set: { followers: userFollowedFollowers },
+    });
+
+    res.status(200).json({ userFollowing, userFollowed });
   } catch (err) {
     res.status(500).json(err);
   }

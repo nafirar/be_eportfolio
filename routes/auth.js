@@ -6,6 +6,10 @@ const jwt = require("jsonwebtoken");
 // Registrasi
 router.post("/register", async (req, res) => {
   try {
+    const checkUser = await User.findOne({ email: req.body.email });
+    if (checkUser) {
+      return res.status(422).json("Email already registered");
+    }
     //hash password using bcrypt
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
