@@ -47,8 +47,8 @@ router.delete("/:id", async (req, res) => {
 //find article
 router.get("/:id", async (req, res) => {
   try {
-    const post = await Article.findById(req.params.id);
-    res.status(200).json(post);
+    const article = await Article.findById(req.params.id);
+    res.status(200).json(article);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -66,7 +66,17 @@ router.get("/all/:id", async (req, res) => {
   }
 });
 
-//get all post
+//get all articles
+router.get("/mobile/all/:id", async (req, res) => {
+  try {
+    const userArticle = await Article.find().sort({ createdAt: "desc" });
+    res.json(userArticle);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//get all articles for timeline
 router.get("/timeline/all/:id", async (req, res) => {
   try {
     const userFollowing = await User.findById(req.params.id);

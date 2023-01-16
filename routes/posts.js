@@ -55,7 +55,17 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-//get all post
+//get all post for mobile
+router.get("/mobile/all/:id", async (req, res) => {
+  try {
+    const userPost = await Post.find().sort({ createdAt: "desc" });
+    res.json(userPost);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//get all post for timeline
 router.get("/timeline/all/:id", async (req, res) => {
   try {
     const userFollowing = await User.findById(req.params.id);
