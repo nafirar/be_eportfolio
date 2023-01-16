@@ -137,7 +137,7 @@ router.put("/follow/:id", async (req, res) => {
   }
 });
 
-// follow user
+// unfollow user
 router.put("/unfollow/:id", async (req, res) => {
   try {
     // hapus following di user yang ngefollow
@@ -161,6 +161,16 @@ router.put("/unfollow/:id", async (req, res) => {
     });
 
     res.status(200).json({ userFollowing, userFollowed });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// temporarily for mobile
+router.get("/mobile/all", async (req, res) => {
+  try {
+    const userAll = await User.find();
+    res.json(userAll);
   } catch (err) {
     res.status(500).json(err);
   }

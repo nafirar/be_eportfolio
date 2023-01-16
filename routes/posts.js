@@ -55,8 +55,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-//get all post for mobile
-router.get("/mobile/all/:id", async (req, res) => {
+// temporarily for mobile
+router.get("/timeline/all", async (req, res) => {
   try {
     const userPost = await Post.find().sort({ createdAt: "desc" });
     res.json(userPost);
