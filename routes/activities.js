@@ -82,7 +82,7 @@ router.get("/last/:id", async (req, res) => {
   try {
     const userActivity = await Activity.findOne({ userId: req.params.id }).sort(
       {
-        endDate: "desc",
+        startDate: "desc",
       }
     );
     res.json(userActivity);
@@ -91,10 +91,10 @@ router.get("/last/:id", async (req, res) => {
   }
 });
 
-// search activitys by query
+// search activities by query
 router.get("/search/:search/", async (req, res) => {
   try {
-    var activitys = await Activity.find({
+    var activities = await Activity.find({
       $or: [
         { desc: { $regex: req.params.search, $options: "i" } },
         { title: { $regex: req.params.search, $options: "i" } },
@@ -103,21 +103,7 @@ router.get("/search/:search/", async (req, res) => {
       createdAt: "desc",
     });
 
-    res.status(200).json(activitys);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-//find activity
-router.get("/files/:id", async (req, res) => {
-  try {
-    const fileAlbum = await Album.find({
-      idActivity: req.params.id,
-    }).sort({
-      createdAt: "desc",
-    });
-    res.json(fileAlbum);
+    res.status(200).json(activities);
   } catch (err) {
     res.status(500).json(err);
   }

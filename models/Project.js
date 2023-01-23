@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ActivitySchema = new mongoose.Schema(
+const ProjectSchema = new mongoose.Schema(
   {
     userId: {
       type: String,
@@ -37,30 +37,53 @@ const ActivitySchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    tasks: [
+    participants: [
+      {
+        type: mongoose.Schema.ObjectId,
+      },
+    ],
+    roadmaps: [
       {
         title: {
           type: String,
           required: true,
         },
-        date: {
+        startDate: {
+          type: Date,
+        },
+        endDate: {
           type: Date,
         },
         desc: {
           type: String,
           max: 500,
         },
-        images: [
+        tasks: [
           {
-            id: {
-              type: Number,
-            },
-            name: {
+            title: {
               type: String,
+              required: true,
             },
-            imgurl: {
+            date: {
+              type: Date,
+            },
+            desc: {
               type: String,
+              max: 500,
             },
+            images: [
+              {
+                id: {
+                  type: Number,
+                },
+                name: {
+                  type: String,
+                },
+                imgurl: {
+                  type: String,
+                },
+              },
+            ],
           },
         ],
       },
@@ -69,4 +92,4 @@ const ActivitySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Activity", ActivitySchema);
+module.exports = mongoose.model("Project", ProjectSchema);

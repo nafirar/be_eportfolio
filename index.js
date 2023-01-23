@@ -14,6 +14,7 @@ const articleRoute = require("./routes/articles");
 const activityRoute = require("./routes/activities");
 const badgeRoute = require("./routes/badges");
 const albumRoute = require("./routes/album");
+const projectRoute = require("./routes/projects");
 
 //koneksi database
 dotenv.config();
@@ -49,6 +50,7 @@ app.use("/api/articles", articleRoute);
 app.use("/api/activities", activityRoute);
 app.use("/api/badges", badgeRoute);
 app.use("/api/album", albumRoute);
+app.use("/api/projects", projectRoute);
 
 //Multer Error File Handling
 app.use((err, req, res, next) => {
@@ -68,5 +70,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(8800, () => {
-  console.log("Listening to port...");
+  console.log("Listening to port 8800");
 });

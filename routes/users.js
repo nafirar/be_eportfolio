@@ -82,7 +82,7 @@ router.get("/search/:id/:name", async (req, res) => {
   try {
     var users = await User.find({
       username: { $regex: req.params.name, $options: "i" },
-      dateBirth: { $ne: null },
+      gender: { $ne: null },
     }).sort({ username: "asc" });
     let temp = [];
     users.forEach((user) => {
@@ -171,6 +171,31 @@ router.get("/mobile/all", async (req, res) => {
   try {
     const userAll = await User.find();
     res.json(userAll);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// get suggested users
+router.get("/suggest/:major/:organization/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    let userFollowing = user.following;
+
+    var users = await User.find({
+      $or: [
+        { major: { $regex: req.params.major, $options: "i" } },
+        { organization: { $regex: req.params.organization, $options: "i" } },
+      ],
+      gender: { $ne: null },
+      _id: { $ne: req.params.id },
+    }).sort({ username: "asc" });
+    let temp = [];
+    users.forEach((user) => {
+      temp.push(user._id);
+    });
+    users = temp;
+    res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
   }
