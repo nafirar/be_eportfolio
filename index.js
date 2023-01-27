@@ -6,6 +6,10 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const multer = require("multer");
 
+// swagger
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
+
 //untuk path
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
@@ -39,6 +43,8 @@ app.use(
 app.use(express.json());
 
 //api
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 app.use(express.static("storage"));
 app.use("/storage/images", express.static("storage/images"));
 app.use("/storage/videos", express.static("storage/videos"));

@@ -39,7 +39,12 @@ const ProjectSchema = new mongoose.Schema(
     },
     participants: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: String,
+      },
+    ],
+    requests: [
+      {
+        type: String,
       },
     ],
     roadmaps: [

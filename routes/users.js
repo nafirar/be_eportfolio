@@ -5,20 +5,6 @@ const fileUpload = require("../utils/fileUpload");
 const fs = require("fs");
 const DIR = "./";
 
-//hapus akun
-router.delete("/:id", async (req, res) => {
-  if (req.body.userId === req.params.id || req.body.isAdmin) {
-    try {
-      const user = await User.findByIdAndDelete(req.params.id);
-      res.status(200).json("Account deleted!");
-    } catch (err) {
-      return res.status(500).json(err);
-    }
-  } else {
-    return res.status(403).json("You only can delete your account!");
-  }
-});
-
 //update akun
 router.put("/:id", fileUpload("./storage/images"), async (req, res) => {
   if (req.body.userId === req.params.id || req.body.isAdmin) {
@@ -43,6 +29,9 @@ router.put("/:id", fileUpload("./storage/images"), async (req, res) => {
     try {
       //Check user have photo/image. if had then first delete local file then database
       const userInfo = await User.findById(id);
+      if (!userInfo) {
+        return res.status(404).json("User not found!");
+      }
       const userPhotoInfo = userInfo.profilePicture;
       // kalau udah ada foto tapi gak update foto
       if (userPhotoInfo && imgUrl == "") {
@@ -70,6 +59,9 @@ router.put("/:id", fileUpload("./storage/images"), async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json("User not found!");
+    }
     const { password, updatedAt, ...other } = user._doc; //mengecualikan field password dan updatedAt
     res.status(200).json(other);
   } catch (err) {
@@ -80,6 +72,11 @@ router.get("/:id", async (req, res) => {
 // search users by query
 router.get("/search/:id/:name", async (req, res) => {
   try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(401).json("Unauthorized");
+    }
+
     var users = await User.find({
       username: { $regex: req.params.name, $options: "i" },
       gender: { $ne: null },
@@ -98,6 +95,11 @@ router.get("/search/:id/:name", async (req, res) => {
 //get all users
 router.get("/all/:id", async (req, res) => {
   try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(401).json("Unauthorized");
+    }
+
     var allUsers = await User.find({ gender: { $ne: null } }).sort({
       username: "asc",
     });
@@ -117,6 +119,10 @@ router.put("/follow/:id", async (req, res) => {
   try {
     // tambah following di user yang ngefollow
     const userFollowing = await User.findById(req.body.userIdFollowing);
+    if (!userFollowing) {
+      return res.status(404).json("User not found!");
+    }
+
     userFollowingFollowing = userFollowing.following;
     userFollowingFollowing.push(req.params.id);
     await userFollowing.updateOne({
@@ -125,13 +131,16 @@ router.put("/follow/:id", async (req, res) => {
 
     // tambah followers di user yang difollow
     const userFollowed = await User.findById(req.params.id);
+    if (!userFollowed) {
+      return res.status(404).json("User not found!");
+    }
     userFollowedFollowers = userFollowed.followers;
     userFollowedFollowers.push(req.body.userIdFollowing);
     await userFollowed.updateOne({
       $set: { followers: userFollowedFollowers },
     });
 
-    res.status(200).json({ userFollowing, userFollowed });
+    res.status(200).json("Followed");
   } catch (err) {
     res.status(500).json(err);
   }
@@ -140,8 +149,11 @@ router.put("/follow/:id", async (req, res) => {
 // unfollow user
 router.put("/unfollow/:id", async (req, res) => {
   try {
-    // hapus following di user yang ngefollow
-    const userFollowing = await User.findById(req.body.userIdFollowing);
+    // hapus following di user yang ngeunfollow
+    const userFollowing = await User.findById(req.body.userIdUnfollowing);
+    if (!userFollowing) {
+      return res.status(404).json("User not found!");
+    }
     userFollowingFollowing = userFollowing.following;
     userFollowingFollowing = userFollowingFollowing.filter(
       (e) => e !== req.params.id
@@ -150,17 +162,20 @@ router.put("/unfollow/:id", async (req, res) => {
       $set: { following: userFollowingFollowing },
     });
 
-    // hapus followers di user yang difollow
+    // hapus followers di user yang diunfollow
     const userFollowed = await User.findById(req.params.id);
+    if (!userFollowed) {
+      return res.status(404).json("User not found!");
+    }
     userFollowedFollowers = userFollowed.followers;
     userFollowedFollowers = userFollowedFollowers.filter(
-      (e) => e !== req.body.userIdFollowing
+      (e) => e !== req.body.userIdUnfollowing
     );
     await userFollowed.updateOne({
       $set: { followers: userFollowedFollowers },
     });
 
-    res.status(200).json({ userFollowing, userFollowed });
+    res.status(200).json("Unfollowed!");
   } catch (err) {
     res.status(500).json(err);
   }
@@ -180,7 +195,9 @@ router.get("/mobile/all", async (req, res) => {
 router.get("/suggest/:major/:organization/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    let userFollowing = user.following;
+    if (!user) {
+      return res.status(401).json("Unauthorized");
+    }
 
     var users = await User.find({
       $or: [
@@ -190,11 +207,26 @@ router.get("/suggest/:major/:organization/:id", async (req, res) => {
       gender: { $ne: null },
       _id: { $ne: req.params.id },
     }).sort({ username: "asc" });
+
+    if (users.length == 0) {
+      users = await User.find({
+        $or: [
+          { major: { $regex: req.params.major, $options: "i" } },
+          { organization: { $regex: req.params.organization, $options: "i" } },
+        ],
+        gender: { $ne: null },
+        _id: { $ne: req.params.id },
+      }).sort({ username: "asc" });
+    }
+
     let temp = [];
+
     users.forEach((user) => {
       temp.push(user._id);
     });
+
     users = temp;
+
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);

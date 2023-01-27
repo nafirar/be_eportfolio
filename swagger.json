@@ -1,0 +1,1883 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "API ePortfolio",
+      "description": "Daftar API ePortfolio",
+      "version": "1.0"
+    },
+    "servers":[
+        {
+            "url": "http://127.0.0.1:8800/api",
+            "description":"localhost"
+        },
+        {
+            "url": "http://103.187.223.15:8800/api",
+            "description":"dev"
+        }
+    ],
+    "tags":[
+      {
+        "name": "User",
+        "description": "User"
+      },
+      {
+        "name":"Post",
+        "description":"Post"
+      },
+      {
+        "name":"Article",
+        "description":"Article"
+      },
+      {
+        "name":"Activity",
+        "description":"Activity and Task"
+      },
+      {
+        "name":"Project",
+        "description":"Project"
+      },
+      {
+        "name":"Badge",
+        "description":"Badge"
+      },
+      {
+        "name":"Album",
+        "description":"Album"
+      }
+    ],
+    "produces": ["application/json"],
+    "paths": {
+      "/users/{id}":{
+        "get":{
+          "tags":[
+            "User"
+          ],
+          "summary":"Get User",
+          "description":"Get user data",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        },
+        "put":{
+          "tags":[
+            "User"
+          ],
+          "summary":"Update User",
+          "description":"Update user data",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "consumes":"multipart/form-data",
+          "requestBody":{
+            "content":{
+              "multipart/form-data":{
+                "schema":{
+                  "type": "object",
+                  "properties":{
+                    "profilePicture":{
+                      "type":"string",
+                      "format":"binary"
+                    },
+                    "userId":{
+                      "type":"string"
+                    },
+                    "email":{
+                      "type":"string"
+                    },
+                    "username":{
+                      "type":"string"
+                    },
+                    "role":{
+                      "type":"string",
+                      "enum": ["dosen", "mahasiswa"]
+                    },
+                    "nim":{
+                      "type":"string"
+                    },
+                    "major":{
+                      "type":"string"
+                    },
+                    "organization":{
+                      "type":"string"
+                    },
+                    "city":{
+                      "type":"string"
+                    },
+                    "dateBirth":{
+                      "type":"string"
+                    },
+                    "gender":{
+                      "type":"string",
+                      "enum": ["male", "female"]
+                    },
+                    "interest":{
+                      "type":"string"
+                    },
+                    "academicField":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "403":{
+              "description":"Forbidden"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/users/all/{id}":{
+        "get":{
+          "tags":[
+            "User"
+          ],
+          "summary":"Get all users",
+          "description":"Get all id users",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"Your user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "401":{
+              "description":"Unauthorized"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/users/search/{id}/{name}":{
+        "get":{
+          "tags":[
+            "User"
+          ],
+          "summary":"Get user by keyword",
+          "description":"Get id users by keyword",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"Your user id"
+            },
+            {
+              "in":"path",
+              "name": "name",
+              "description":"keyword"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "401":{
+              "description":"Unauthorized"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/users/follow/{id}":{
+        "put":{
+          "tags":[
+            "User"
+          ],
+          "summary":"Follow User",
+          "description":"Following user",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"User id who is followed"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userIdFollowing":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/users/unfollow/{id}":{
+        "put":{
+          "tags":[
+            "User"
+          ],
+          "summary":"Unfollow User",
+          "description":"Unfollow user",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"User id who is unfollowed"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userIdUnfollowing":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/users//suggest/{major}/{organization}/{id}":{
+        "get":{
+          "tags":[
+            "User"
+          ],
+          "summary":"Get Users Suggestion",
+          "description":"Get Users Id Suggestion by major and organization",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "major",
+              "description":"Major for user suggestion"
+            },
+            {
+              "in":"path",
+              "name": "organization",
+              "description":"Organization for user suggestion"
+            },
+            {
+              "in":"path",
+              "name": "id",
+              "description":"Your user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "401":{
+              "description":"Unauthorized"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/post/":{
+        "post":{
+          "tags":[
+            "Post"
+          ],
+          "summary":"Create Post",
+          "description":"Create a new post",
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    },
+                    "desc":{
+                      "type":"string"
+                    },
+                    "mermaidDiagram":{
+                      "type":"string"
+                    },
+                    "isPublic":{
+                      "type":"boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/posts/{id}":{
+        "put":{
+          "tags":[
+            "Post"
+          ],
+          "summary":"Update Post",
+          "description":"Update post",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"post id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    },
+                    "desc":{
+                      "type":"string"
+                    },
+                    "mermaidDiagram":{
+                      "type":"string"
+                    },
+                    "isPublic":{
+                      "type":"boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "403":{
+              "description":"Forbidden"
+            },
+            "404":{
+              "description":"Post not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        },
+        "delete":{
+          "tags":[
+            "Post"
+          ],
+          "summary":"Delete Post",
+          "description":"Delete post",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"post id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "403":{
+              "description":"Forbidden"
+            },
+            "404":{
+              "description":"Post not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        },
+        "get":{
+          "tags":[
+            "Post"
+          ],
+          "summary":"Get Post",
+          "description":"Get post data",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"post id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"Post not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/posts/timeline/all/{id}":{
+        "get":{
+          "tags":[
+            "Post"
+          ],
+          "summary":"Get All Posts for home",
+          "description":"Get all posts data for home, only posts from user who followed",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/posts/all/{id}":{
+        "get":{
+          "tags":[
+            "Post"
+          ],
+          "summary":"Get All Posts From User",
+          "description":"Get all posts data from user",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/posts/search/{keyword}":{
+        "get":{
+          "tags":[
+            "Post"
+          ],
+          "summary":"Get Post by Keyword",
+          "description":"Get post data by keyword",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "keyword",
+              "description":"keyword"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/articles/":{
+        "post":{
+          "tags":[
+            "Article"
+          ],
+          "summary":"Create Article",
+          "description":"Create a new article",
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    },
+                    "coverArticle":{
+                      "type":"string"
+                    },
+                    "title":{
+                      "type":"string"
+                    },
+                    "desc":{
+                      "type":"string"
+                    },
+                    "mermaidDiagram":{
+                      "type":"string"
+                    },
+                    "isPublic":{
+                      "type":"boolean"
+                    },
+                    "tags":{
+                      "type":"array",
+                      "items":{
+                        "type":"string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/articles/{id}":{
+        "put":{
+          "tags":[
+            "Article"
+          ],
+          "summary":"Update Article",
+          "description":"Update article",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"article id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    },
+                    "coverArticle":{
+                      "type":"string"
+                    },
+                    "title":{
+                      "type":"string"
+                    },
+                    "desc":{
+                      "type":"string"
+                    },
+                    "mermaidDiagram":{
+                      "type":"string"
+                    },
+                    "isPublic":{
+                      "type":"boolean"
+                    },
+                    "tags":{
+                      "type":"array",
+                      "items":{
+                        "type":"string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "403":{
+              "description":"Forbidden"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        },
+        "delete":{
+          "tags":[
+            "Article"
+          ],
+          "summary":"Delete Article",
+          "description":"Delete article",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"article id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "403":{
+              "description":"Forbidden"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        },
+        "get":{
+          "tags":[
+            "Article"
+          ],
+          "summary":"Get Article",
+          "description":"Get article data",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"article id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"Article not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/articles/all/{id}":{
+        "get":{
+          "tags":[
+            "Article"
+          ],
+          "summary":"Get All Articles From User",
+          "description":"Get all articles data from user",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/articles/timeline/all/{id}":{
+        "get":{
+          "tags":[
+            "Article"
+          ],
+          "summary":"Get All Articles for home",
+          "description":"Get all articles data for home, only articles from user who followed",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/articles/search/{keyword}":{
+        "get":{
+          "tags":[
+            "Article"
+          ],
+          "summary":"Get Post by Keyword",
+          "description":"Get post data by keyword",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "keyword",
+              "description":"keyword"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/activities":{
+        "post":{
+          "tags":[
+            "Activity"
+          ],
+          "summary":"Create Activity",
+          "description":"Create a new activity",
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    },
+                    "image":{
+                      "type":"string"
+                    },
+                    "title":{
+                      "type":"string"
+                    },
+                    "type":{
+                      "type":"string",
+                      "enum": ["academic", "non-academic"]
+                    },
+                    "startDate":{
+                      "type":"string"
+                    },
+                    "endDate":{
+                      "type":"string",
+                      "nullable":true
+                    },
+                    "desc":{
+                      "type":"string"
+                    },
+                    "isPublic":{
+                      "type":"boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/activities/{id}":{
+        "put":{
+          "tags":[
+            "Activity"
+          ],
+          "summary":"Update Activity",
+          "description":"Update activity",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"activity id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    },
+                    "image":{
+                      "type":"string"
+                    },
+                    "title":{
+                      "type":"string"
+                    },
+                    "type":{
+                      "type":"string",
+                      "enum": ["academic", "non-academic"]
+                    },
+                    "startDate":{
+                      "type":"string"
+                    },
+                    "endDate":{
+                      "type":"string",
+                      "nullable":true
+                    },
+                    "desc":{
+                      "type":"string"
+                    },
+                    "isPublic":{
+                      "type":"boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "403":{
+              "description":"Forbidden"
+            },
+            "404":{
+              "description":"Activity not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        },
+        "delete":{
+          "tags":[
+            "Activity"
+          ],
+          "summary":"Delete Activity",
+          "description":"Delete activity",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"activity id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "403":{
+              "description":"Forbidden"
+            },
+            "404":{
+              "description":"Activity not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        },
+        "get":{
+          "tags":[
+            "Activity"
+          ],
+          "summary":"Get Activity",
+          "description":"Get activity data",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"activity id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"Activity not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/activities/all/{id}":{
+        "get":{
+          "tags":[
+            "Activity"
+          ],
+          "summary":"Get All Activities From User",
+          "description":"Get all activities data from user",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/activities/last/{id}":{
+        "get":{
+          "tags":[
+            "Activity"
+          ],
+          "summary":"Get Last Activity From User",
+          "description":"Get last activity data from user",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/activities/search/{keyword}":{
+        "get":{
+          "tags":[
+            "Activity"
+          ],
+          "summary":"Get Activity by Keyword",
+          "description":"Get activity data by keyword",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "keyword",
+              "description":"keyword"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/projects":{
+        "post":{
+          "tags":[
+            "Project"
+          ],
+          "summary":"Create project",
+          "description":"Create a new project",
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    },
+                    "image":{
+                      "type":"string"
+                    },
+                    "title":{
+                      "type":"string"
+                    },
+                    "type":{
+                      "type":"string",
+                      "enum": ["academic", "non-academic"]
+                    },
+                    "startDate":{
+                      "type":"string"
+                    },
+                    "endDate":{
+                      "type":"string",
+                      "nullable":true
+                    },
+                    "desc":{
+                      "type":"string"
+                    },
+                    "isPublic":{
+                      "type":"boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/projects/{id}":{
+        "put":{
+          "tags":[
+            "Project"
+          ],
+          "summary":"Update Project",
+          "description":"Update project",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"project id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    },
+                    "image":{
+                      "type":"string"
+                    },
+                    "title":{
+                      "type":"string"
+                    },
+                    "type":{
+                      "type":"string",
+                      "enum": ["academic", "non-academic"]
+                    },
+                    "startDate":{
+                      "type":"string"
+                    },
+                    "endDate":{
+                      "type":"string",
+                      "nullable":true
+                    },
+                    "desc":{
+                      "type":"string"
+                    },
+                    "isPublic":{
+                      "type":"boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "403":{
+              "description":"Forbidden"
+            },
+            "404":{
+              "description":"Project not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        },
+        "delete":{
+          "tags":[
+            "Project"
+          ],
+          "summary":"Delete Project",
+          "description":"Delete project",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"project id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "403":{
+              "description":"Forbidden"
+            },
+            "404":{
+              "description":"Project not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        },
+        "get":{
+          "tags":[
+            "Project"
+          ],
+          "summary":"Get Project",
+          "description":"Get project data",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"project id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"project not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/projects/all/{id}":{
+        "get":{
+          "tags":[
+            "Project"
+          ],
+          "summary":"Get All Projects From User",
+          "description":"Get all projects data from user",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/projects/search/{keyword}":{
+        "get":{
+          "tags":[
+            "Project"
+          ],
+          "summary":"Get Project by Keyword",
+          "description":"Get project data by keyword",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "keyword",
+              "description":"keyword"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/projects/suggest/{id}":{
+        "get":{
+          "tags":[
+            "Project"
+          ],
+          "summary":"Get Recent Projects Suggestion",
+          "description":"Get 3 recent projects suggestion",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/projects/request/{id}":{
+        "put":{
+          "tags":[
+            "Project"
+          ],
+          "summary":"Request to participate",
+          "description":"Request to participate in the project",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"project id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"Project not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/projects/cancelrequest/{id}":{
+        "put":{
+          "tags":[
+            "Project"
+          ],
+          "summary":"Cancel Request to participate",
+          "description":"Cancel request to participate in the project",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"project id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"Project not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/projects/accept/{id}":{
+        "put":{
+          "tags":[
+            "Project"
+          ],
+          "summary":"Accept Request to participate",
+          "description":"Accept request to participate in the project",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"project id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"Project not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/badges":{
+        "post":{
+          "tags":[
+            "Badge"
+          ],
+          "summary":"Create badge",
+          "description":"Create a new badge",
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    },
+                    "title":{
+                      "type":"string"
+                    },
+                    "imgBadge":{
+                      "type":"string"
+                    },
+                    "issuer":{
+                      "type":"string"
+                    },
+                    "desc":{
+                      "type":"string"
+                    },
+                    "url":{
+                      "type":"string"
+                    },
+                    "earnedDate":{
+                      "type":"string"
+                    },
+                    "skills":{
+                      "type":"array",
+                      "items":{
+                        "type":"string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/badges/{id}":{
+        "put":{
+          "tags":[
+            "Badge"
+          ],
+          "summary":"Update Badge",
+          "description":"Update badge",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"badge id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    },
+                    "title":{
+                      "type":"string"
+                    },
+                    "imgBadge":{
+                      "type":"string"
+                    },
+                    "issuer":{
+                      "type":"string"
+                    },
+                    "desc":{
+                      "type":"string"
+                    },
+                    "url":{
+                      "type":"string"
+                    },
+                    "earnedDate":{
+                      "type":"string"
+                    },
+                    "skills":{
+                      "type":"array",
+                      "items":{
+                        "type":"string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "403":{
+              "description":"Forbidden"
+            },
+            "404":{
+              "description":"Project not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        },
+        "delete":{
+          "tags":[
+            "Badge"
+          ],
+          "summary":"Delete Badge",
+          "description":"Delete badge",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"badge id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "403":{
+              "description":"Forbidden"
+            },
+            "404":{
+              "description":"Project not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        },
+        "get":{
+          "tags":[
+            "Badge"
+          ],
+          "summary":"Get Badge",
+          "description":"Get badge data",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"badge id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"Badge not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/badges/all/{id}":{
+        "get":{
+          "tags":[
+            "Badge"
+          ],
+          "summary":"Get All Badges From User",
+          "description":"Get all badges data from user",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/album":{
+        "post":{
+          "tags":[
+            "Album"
+          ],
+          "summary":"Upload image",
+          "description":"Upload image to album",
+          "consumes":"multipart/form-data",
+          "requestBody":{
+            "content":{
+              "multipart/form-data":{
+                "schema":{
+                  "type": "object",
+                  "properties":{
+                    "fileAlbum":{
+                      "type":"string",
+                      "format":"binary"
+                    },
+                    "data":{
+                      "type":"object",
+                      "properties":{
+                        "userId":{
+                          "type":"string"
+                        },
+                        "filename":{
+                          "type":"string"
+                        },
+                        "filesize":{
+                          "type":"integer"
+                        },
+                        "type":{
+                          "type":"string",
+                          "enum": ["image", "video"]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/album/video":{
+        "post":{
+          "tags":[
+            "Album"
+          ],
+          "summary":"Upload video",
+          "description":"Upload video to album",
+          "consumes":"multipart/form-data",
+          "requestBody":{
+            "content":{
+              "multipart/form-data":{
+                "schema":{
+                  "type": "object",
+                  "properties":{
+                    "fileAlbum":{
+                      "type":"string",
+                      "format":"binary"
+                    },
+                    "data":{
+                      "type":"object",
+                      "properties":{
+                        "userId":{
+                          "type":"string"
+                        },
+                        "filename":{
+                          "type":"string"
+                        },
+                        "filesize":{
+                          "type":"integer"
+                        },
+                        "type":{
+                          "type":"string",
+                          "enum": ["image", "video"]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/album/{id}":{
+        "delete":{
+          "tags":[
+            "Album"
+          ],
+          "summary":"Delete file",
+          "description":"Delete file from album",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"file id"
+            }
+          ],
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "userId":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "403":{
+              "description":"Forbidden"
+            },
+            "404":{
+              "description":"Project not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/album/all/{id}":{
+        "get":{
+          "tags":[
+            "Album"
+          ],
+          "summary":"Get All Files From User Album",
+          "description":"Get all files data from user album",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      }
+    }
+ }
