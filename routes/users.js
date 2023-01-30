@@ -211,8 +211,8 @@ router.get("/suggest/:major/:organization/:id", async (req, res) => {
     if (users.length == 0) {
       users = await User.find({
         $or: [
-          { major: { $regex: req.params.major, $options: "i" } },
-          { organization: { $regex: req.params.organization, $options: "i" } },
+          { major: { $regex: "", $options: "i" } },
+          { organization: { $regex: "", $options: "i" } },
         ],
         gender: { $ne: null },
         _id: { $ne: req.params.id },
