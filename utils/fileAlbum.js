@@ -23,11 +23,13 @@ const fileAlbum = (destination) =>
         file.mimetype == "image/png" ||
         file.mimetype == "image/jpg" ||
         file.mimetype == "image/jpeg" ||
+        file.mimetype == "image/gif" ||
+        file.mimetype == "image/svg+xml" ||
+        file.mimetype == "image/webp" ||
         file.mimetype == "video/quicktime" ||
         file.mimetype == "video/webm" ||
-        file.mimetype == "video/webm" ||
-        file.mimetype == "audio/ogg" ||
         file.mimetype == "video/mp4" ||
+        file.mimetype == "audio/ogg" ||
         file.mimetype == "application/pdf"
       ) {
         cb(null, true);

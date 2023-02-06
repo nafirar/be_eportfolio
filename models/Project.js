@@ -76,6 +76,10 @@ const ProjectSchema = new mongoose.Schema(
               type: String,
               max: 500,
             },
+            status: {
+              type: String,
+              enum: ["prepare", "todo", "inprogress", "complete"],
+            },
             images: [
               {
                 id: {
@@ -85,6 +89,20 @@ const ProjectSchema = new mongoose.Schema(
                   type: String,
                 },
                 imgurl: {
+                  type: String,
+                },
+              },
+            ],
+            todos: [
+              {
+                title: {
+                  type: String,
+                  required: true,
+                },
+                done: {
+                  type: Boolean,
+                },
+                assigne: {
                   type: String,
                 },
               },

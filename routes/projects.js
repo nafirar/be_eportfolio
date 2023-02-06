@@ -190,4 +190,26 @@ router.put("/accept/:id", async (req, res) => {
   }
 });
 
+// get all request participation by id user
+router.get("/allrequest/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json("User not found!");
+    }
+    const userProject = await Project.find({ userId: req.params.id }).sort({
+      createdAt: "desc",
+    });
+    let temp = [];
+    userProject.forEach((project) => {
+      project.requests.forEach((userId) => {
+        temp.push({ projectId: project._id, userId: userId });
+      });
+    });
+    res.json(temp);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

@@ -199,23 +199,30 @@ router.get("/suggest/:major/:organization/:id", async (req, res) => {
       return res.status(401).json("Unauthorized");
     }
 
+    let userFollowing = user.following;
+
     var users = await User.find({
       $or: [
         { major: { $regex: req.params.major, $options: "i" } },
         { organization: { $regex: req.params.organization, $options: "i" } },
       ],
       gender: { $ne: null },
-      _id: { $ne: req.params.id },
+      $and: [{ _id: { $ne: req.params.id } }, { _id: { $nin: userFollowing } }],
     }).sort({ username: "asc" });
 
     if (users.length == 0) {
       users = await User.find({
         $or: [
+          { major: { $regex: req.params.major, $options: "i" } },
+          { organization: { $regex: req.params.organization, $options: "i" } },
           { major: { $regex: "", $options: "i" } },
           { organization: { $regex: "", $options: "i" } },
         ],
         gender: { $ne: null },
-        _id: { $ne: req.params.id },
+        $and: [
+          { _id: { $ne: req.params.id } },
+          { _id: { $nin: userFollowing } },
+        ],
       }).sort({ username: "asc" });
     }
 

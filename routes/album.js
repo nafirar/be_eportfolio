@@ -8,7 +8,7 @@ const DIR = "./";
 //create image file album
 router.post("/", fileAlbum("./storage/images"), async (req, res) => {
   try {
-    const user = await User.findById(req.body.data.userId);
+    const user = await User.findById(req.body.userId);
     if (!user) {
       return res.status(404).json("User not found!");
     }
@@ -16,7 +16,6 @@ router.post("/", fileAlbum("./storage/images"), async (req, res) => {
     var imgUrl = "";
     if (req.file) {
       imgUrl = `storage/images/${req.file.filename}`;
-      req.body = JSON.parse(req.body.data);
     }
     req.body.fileAlbum = imgUrl;
 
@@ -31,7 +30,7 @@ router.post("/", fileAlbum("./storage/images"), async (req, res) => {
 //create video file album
 router.post("/video", fileAlbum("./storage/videos"), async (req, res) => {
   try {
-    const user = await User.findById(req.body.data.userId);
+    const user = await User.findById(req.body.userId);
     if (!user) {
       return res.status(404).json("User not found!");
     }
@@ -39,7 +38,6 @@ router.post("/video", fileAlbum("./storage/videos"), async (req, res) => {
     var imgUrl = "";
     if (req.file) {
       imgUrl = `storage/videos/${req.file.filename}`;
-      req.body = JSON.parse(req.body.data);
     }
     req.body.fileAlbum = imgUrl;
 
