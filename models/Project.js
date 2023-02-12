@@ -102,9 +102,11 @@ const ProjectSchema = new mongoose.Schema(
                 done: {
                   type: Boolean,
                 },
-                assigne: {
-                  type: String,
-                },
+                assignee: [
+                  {
+                    type: String,
+                  },
+                ],
               },
             ],
           },
