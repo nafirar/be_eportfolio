@@ -1483,6 +1483,33 @@
           }
         }
       },
+      "/projects/allrequest/{id}":{
+        "get":{
+          "tags":[
+            "Project"
+          ],
+          "summary":"Get All Request for Participant Project",
+          "description":"Get All Request for Participant Project",
+          "parameters":[
+            {
+              "in":"path",
+              "name": "id",
+              "description":"user id"
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Success"
+            },
+            "404":{
+              "description":"User not found"
+            },
+            "500":{
+              "description": "Error"
+            }
+          }
+        }
+      },
       "/badges":{
         "post":{
           "tags":[

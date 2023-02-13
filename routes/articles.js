@@ -79,16 +79,6 @@ router.get("/all/:id", async (req, res) => {
   }
 });
 
-// temporarily for mobile
-router.get("/timeline/all", async (req, res) => {
-  try {
-    const userArticle = await Article.find().sort({ createdAt: "desc" });
-    res.json(userArticle);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
 //get all articles for timeline
 router.get("/timeline/all/:id", async (req, res) => {
   try {

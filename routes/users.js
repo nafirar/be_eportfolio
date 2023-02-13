@@ -181,16 +181,6 @@ router.put("/unfollow/:id", async (req, res) => {
   }
 });
 
-// temporarily for mobile
-router.get("/mobile/all", async (req, res) => {
-  try {
-    const userAll = await User.find();
-    res.json(userAll);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
 // get suggested users
 router.get("/suggest/:major/:organization/:id", async (req, res) => {
   try {
