@@ -102,6 +102,9 @@ const ProjectSchema = new mongoose.Schema(
                 done: {
                   type: Boolean,
                 },
+                report: {
+                  type: String,
+                },
                 assignee: [
                   {
                     type: String,
