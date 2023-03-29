@@ -17,9 +17,11 @@ const ActivitySchema = new mongoose.Schema(
     type: {
       type: String,
       enum: ["academic", "non-academic"],
+      required: true,
     },
     startDate: {
       type: Date,
+      required: true,
     },
     endDate: {
       type: Date,

@@ -334,7 +334,7 @@
           }
         }
       },
-      "/post/":{
+      "/posts/":{
         "post":{
           "tags":[
             "Post"
